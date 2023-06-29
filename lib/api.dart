@@ -6,17 +6,26 @@ import 'package:http/http.dart' as http;
 import 'config.dart';
 
 class ApiService {
-  Future<String> sendMessageToOpenAI(String message) async {
+  Future<String> sendMessageToOpenAI(
+      String message, Celebrity celebrity) async {
     const openaiEndpoint =
-        'https://api.openai.com/v1/engines/davinci-codex/completions';
+        'https://api.openai.com/v1/chat/gpt-3.5-turbo/completions';
     final openaiResponse = await http.post(Uri.parse(openaiEndpoint),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${Config.openaiToken}',
         },
         body: json.encode({
-          'prompt': message,
-          'max_tokens': '50',
+          'prompt':
+              "Asume que eres ${celebrity.name} y estas hablando en chat con un fan, tienes que contestar actuar y decir dialaogos comunes de la celebridad y demas, te dejo el mensaje: $message",
+          'max_tokens': 50, // Máximo número de tokens en la respuesta generada
+          'temperature':
+              0.8, // Controla la aleatoriedad de la respuesta (mayor valor = más aleatorio)
+          'top_p':
+              1.0, // Controla la diversidad de la respuesta (1.0 = máxima diversidad)
+          'n': 1, // Número de respuestas a generar
+          'stop':
+              '\n', // Detiene la generación de la respuesta en un salto de línea
         }));
 
     return openaiResponse.body;
@@ -26,6 +35,9 @@ class ApiService {
     const telegramEndpoint =
         'https://api.telegram.org/bot${Config.telegramBotToken}/sendMessage';
     final telegramResponse = await http.post(Uri.parse(telegramEndpoint),
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: json.encode({
           "chat_id": Config.telegramChatId,
           "text": message,
