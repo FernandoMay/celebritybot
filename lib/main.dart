@@ -1,4 +1,4 @@
-import 'package:celebritybot/chat.dart';
+import 'package:celebritybot/celebrities.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: const ChatScreen(),
+      home: const CelebrityScreen(),
     );
   }
 }

@@ -1,6 +1,7 @@
 // api_service.dart
 import 'dart:convert';
 
+import 'package:celebritybot/models.dart';
 import 'package:http/http.dart' as http;
 import 'config.dart';
 
@@ -55,6 +56,25 @@ class ApiService {
       return messageText;
     } else {
       return 'Failed to receive message';
+    }
+  }
+
+  Future<List<Celebrity>> getCelebrities() async {
+    const url =
+        'https://api.themoviedb.org/3/person/popular?api_key=${Config.tmdbApiKey}';
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      final results = jsonData['results'];
+
+      final celebrities = results.map((celebrity) {
+        return Celebrity.fromJson(celebrity);
+      }).toList();
+
+      return celebrities;
+    } else {
+      throw Exception('Failed to fetch celebrities');
     }
   }
 }
