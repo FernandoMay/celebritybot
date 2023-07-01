@@ -221,6 +221,7 @@ class _CelebrityDetailScreenState extends State<CelebrityDetailScreen> {
                   child: TextField(
                     controller: _textEditingController,
                     onSubmitted: _handleSubmitted,
+                    autofocus: true,
                     decoration: InputDecoration(
                       hintText: 'Type a message...',
                       border: OutlineInputBorder(
